@@ -3,6 +3,7 @@ const router = express.Router();
 const {savePoint, updatePoint, deletePoint, getNeighbours, getPoints} = require('../workers/storage');
 
 router.get('/neighbours', function(req, res, next) {
+    console.log('neighbours');
     const m = req.query.m;//m - radius in km
     const x = req.query.x;
     const y = req.query.y;
@@ -41,6 +42,7 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/', function(req, res, next) {
+    console.log('add');
     const x = req.body.x;
     const description = req.body.info;
     const y = req.body.y;
@@ -51,7 +53,8 @@ router.post('/', function(req, res, next) {
                 res.send({error});
             }
             else*/ res.send(result);
-        }).catch(error => {
+        })
+        .catch(error => {
         if(error && error.length > 0) {
             res.statusCode = 500;
             res.send({error});
@@ -62,13 +65,40 @@ router.post('/', function(req, res, next) {
 router.put('/', function(req, res, next) {
     const x = req.body.x;
     const y = req.body.y;
-    res.send(JSON.stringify(updatePoint({x, y})));
+    const description = req.body.info;
+    console.log('put');
+   updatePoint({id: req.body.id, x, y, description})
+       .then(result => {
+           /*if(error && error.length > 0) {
+               res.statusCode = 500;
+               res.send({error});
+           }
+           else*/ res.send(result);
+       })
+       .catch(error => {
+           if(error && error.length > 0) {
+               res.statusCode = 500;
+               res.send({error});
+           }
+       });
 });
 
-router.delete('/', function(req, res, next) {
-    const x = req.query.x;
-    const y = req.query.y;
-    res.send(JSON.stringify(deletePoint({x, y})));
+router.delete('/:id', function(req, res, next) {
+    const id = req.params.id;
+    deletePoint(id)
+        .then(result => {
+        /*if(error && error.length > 0) {
+            res.statusCode = 500;
+            res.send({error});
+        }
+        else*/ res.send(result);
+        })
+        .catch(error => {
+            if(error && error.length > 0) {
+                res.statusCode = 500;
+                res.send({error});
+            }
+        });
 });
 
 module.exports = router;

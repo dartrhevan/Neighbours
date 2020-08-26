@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const Point = mongoose.model('Point', new mongoose.Schema({
+const pointScheme = new mongoose.Schema({
     description: String,
     location: {
         type: {
@@ -13,9 +13,13 @@ const Point = mongoose.model('Point', new mongoose.Schema({
             type: [Number],//[ longitude , latitude ]
             required: true// -180 =< longitude <= 180 -90 =< latitude <= 90
         },
-        //index: '2dsphere',
+        //ndex: '2dsphere',
     }
-}));
+});
+
+pointScheme.index({location: '2dsphere'});
+
+const Point = mongoose.model('Point', pointScheme);
 
 mongoose.connect('mongodb://localhost:27017/example');
 
