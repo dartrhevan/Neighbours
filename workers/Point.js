@@ -12,15 +12,12 @@ const pointScheme = new mongoose.Schema({
         coordinates: {
             type: [Number],//[ longitude , latitude ]
             required: true// -180 =< longitude <= 180 -90 =< latitude <= 90
-        },
-        //ndex: '2dsphere',
+        }
     }
 });
 
 pointScheme.index({location: '2dsphere'});
 
 const Point = mongoose.model('Point', pointScheme);
-
-mongoose.connect('mongodb://localhost:27017/example');
 
 module.exports = Point;
