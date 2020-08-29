@@ -4,7 +4,7 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const mongoose = require('mongoose');
 
-mongoose.connect('mongodb://localhost:27017/example');
+mongoose.connect('mongodb://localhost:27017/db1');
 
 const pointRouter = require('./routes/point');
 

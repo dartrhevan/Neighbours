@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Point = require('../workers/Point');
 
-mongoose.connect('mongodb://localhost:27017/example');
+//mongoose.connect('mongodb://localhost:27017/example');
 
 const Energetic = new Point({description: "Energetic", location: { coordinates: [51.741918, 58.796505] }});
 
@@ -12,3 +12,5 @@ const Gay = new Point({description: "Gay", location: { coordinates: [51.462286, 
 Energetic.save();
 Irikla.save();
 Gay.save();
+
+module.exports = { Energetic, Irikla, Gay };
