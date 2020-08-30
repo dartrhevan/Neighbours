@@ -1,0 +1,28 @@
+language: node_js
+node_js:
+  - 12.14.0
+
+services:
+  - mongodb
+
+before_install:
+  - pushd ./frontend/
+  - npm install
+  - npm run build
+  - cp -r ./build/* ../backend/public
+  - popd
+  - cd ./backend
+
+jobs:
+  include:
+    - stage: test
+      script: npm run test --prefix ./backend
+    - stage: deploy to production
+      deploy:
+        provider: heroku
+        api_key: $HEROKU_API_KEY
+        app: $HEROKU_APP_NAME
+        skip_cleanup: true
+
+
+
