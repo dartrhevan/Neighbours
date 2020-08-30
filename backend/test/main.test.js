@@ -1,8 +1,9 @@
 const request = require("supertest");
 const assert = require("assert");
-const {describe, test, it} = require('@jest/globals');
+const {describe, afterAll, it} = require('@jest/globals');
 const {Energetic, Irikla, Gay, RemovingPoint} = require('./setupTests');
 
+const mongoose = require('mongoose');
 const app = require("../app");
 
 describe("Tests", () => {
@@ -17,7 +18,8 @@ describe("Tests", () => {
 
                 assert.notEqual(list.indexOf(Energetic), -1, "Contains Energetic");
                 assert.notEqual(list.indexOf(Irikla), -1, "Contains Irikla");
-                assert.notEqual(list.indexOf(Gay), -1,"Contains Gay");
+                assert.notEqual(list.indexOf(Gay), -1, "Contains Gay");
+                done();
             })
             .end(done);
     });
@@ -31,7 +33,8 @@ describe("Tests", () => {
                 console.log(list);
                 assert.ok(typeof list === typeof [], "Response type is list");
 
-                assert.equal(list.length, 2,"Correct points count");
+                assert.equal(list.length, 2, "Correct points count");
+                done();
             })
             .end(done);
     });
@@ -45,13 +48,14 @@ describe("Tests", () => {
                 console.log(list);
                 assert.notEqual(list.indexOf(Energetic), -1, "Contains Energetic");
                 assert.notEqual(list.indexOf(Irikla), -1, "Contains Irikla");
-                assert.equal(list.indexOf(Gay), -1,"Not contains Gay");
+                assert.equal(list.indexOf(Gay), -1, "Not contains Gay");
+                done();
             })
             .end(done);
     });
 
     it("Add point tests", done => {
-        const point = {description: "Yakub", location: {coordinates: [30, 30]}};
+        const point = {description: "Yakub", location: {coordinates: [ 30, 30 ]}};
         request(app)
             .post('/api/point/')
             .send({x: 30, y: 30, info: "Yakub"})
@@ -67,6 +71,7 @@ describe("Tests", () => {
                         console.log(list);
                         const index = list.indexOf(point);
                         assert.notEqual(index, -1, "Contains new point");
+                        done();
                     })
                     .end(done)
             );
@@ -87,6 +92,7 @@ describe("Tests", () => {
                 const list = response.body;
                 console.log(list);
                 assert.equal(list.find(el => el._id === id), undefined, "Point removed");
+                done();
             })
             .end(done);
     });
@@ -98,7 +104,7 @@ describe("Tests", () => {
             .set('Accept', 'application/json')
             //.expect('Content-Type', /json/)
             .expect(400)
-            .expect({error: "Parameter y is missed" })
+            .expect({error: "Parameter y is missed"})
             .end(done);
     });
 
@@ -113,8 +119,13 @@ describe("Tests", () => {
 
                 assert.notEqual(list.indexOf(Energetic), -1, "Contains Energetic");
                 assert.notEqual(list.indexOf(Irikla), -1, "Contains Irikla");
-                assert.notEqual(list.indexOf(Gay), -1,"Contains Gay");
+                assert.notEqual(list.indexOf(Gay), -1, "Contains Gay");
+                done();
             })
             .end(done);
     });
+});
+
+afterAll(async () => {
+    await mongoose.connection.close()
 });
