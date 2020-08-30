@@ -9,6 +9,7 @@ describe("Tests", () => {
     it("Get list tests", done => {
         request(app)
             .get("/api/point?page=0&count=100")
+            .expect(200)
             .expect(response => {
                 const list = response.body;//JSON.parse(response.body);
                 console.log(list);
@@ -24,6 +25,7 @@ describe("Tests", () => {
     it("Pagination tests", done => {
         request(app)
             .get("/api/point?count=2&page=0")
+            .expect(200)
             .expect(response => {
                 const list = response.body;//JSON.parse(response.body);
                 console.log(list);
@@ -37,6 +39,7 @@ describe("Tests", () => {
     it("Get neighbours tests", done => {
         request(app)
             .get(`/api/point/neighbours?m=30&x=51.741918&y=58.796505`)//Energetic's coordinates
+            .expect(200)
             .expect(response => {
                 const list = response.body;//JSON.parse(response.body);
                 console.log(list);
@@ -57,7 +60,8 @@ describe("Tests", () => {
             .expect(200)
             .end((err, res) =>
                 request(app)
-                    .get("/api/point/")
+                    .get("/api/point?page=0&count=100")
+                    .expect(200)
                     .expect(response => {
                         const list = response.body;
                         console.log(list);
@@ -72,11 +76,13 @@ describe("Tests", () => {
         const id = RemovingPoint._id.toString();
         console.log(id);
         const resp = await request(app)
-            .delete("/api/point/" + id);
+            .delete("/api/point/" + id)
+            .expect(200);
 
         console.log("Checking");
         request(app)
-            .get("/api/point/")
+            .get("/api/point?page=0&count=100")
+            .expect(200)
             .expect(response => {
                 const list = response.body;
                 console.log(list);
@@ -98,7 +104,8 @@ describe("Tests", () => {
 
     it("Neighbours test", async done => {
         request(app)
-            .get("/api/point/")
+            .get("/api/point?page=0&count=100")
+            .expect(200)
             .expect(response => {
                 const list = response.body;//JSON.parse(response.body);
                 console.log(list);
