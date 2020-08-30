@@ -5,6 +5,7 @@ const logger = require('morgan');
 const mongoose = require('mongoose');
 
 mongoose.connect('mongodb://localhost:27017/db1');
+mongoose.set('useCreateIndex', true);
 
 const pointRouter = require('./routes/point');
 

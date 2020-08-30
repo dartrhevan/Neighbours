@@ -7,7 +7,8 @@ const pointScheme = new mongoose.Schema({
             type: String, // Don't do `{ location: { type: String } }`
             enum: ['Point'], // 'location.type' must be 'Point'
             default: "Point",
-            required: true
+            required: true,
+            //index: '2dsphere'
         },
         coordinates: {
             type: [Number],//[ longitude , latitude ]

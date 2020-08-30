@@ -1,24 +1,89 @@
 const request = require("supertest");
 const assert = require("assert");
-//const {describe, test, it} = require('@jest/globals');
-const {Energetic, Irikla, Gay} = require('./setupTests');
+const {describe, test, it} = require('@jest/globals');
+const {Energetic, Irikla, Gay, RemovingPoint} = require('./setupTests');
 
 const app = require("../app");
 
-it("Get list tests", done => {
-    request(app)
-        .get("/api/point/")
-        .expect(response => {
-            const list = response.body;//JSON.parse(response.body);
-            console.log(list);
-            //it("Should return a list of points", () =>
-                assert.ok(typeof list === typeof [], "Test");//);
+describe("Tests", () => {
+    it("Get list tests", done => {
+        request(app)
+            .get("/api/point/")
+            .expect(response => {
+                const list = response.body;//JSON.parse(response.body);
+                console.log(list);
+                assert.ok(typeof list === typeof [], "Response type is list");
 
-            //it("List should contains predefined points", () => {
-                assert.ok(list.contains(Energetic), "Contains Energetic");
-                assert.ok(list.contains(Irikla), "Contains Irikla");
-                assert.ok(list.contains(Gay), "Contains Gay");
-            //});
-        })
-        .end(done);
+                assert.notEqual(list.indexOf(Energetic), -1, "Contains Energetic");
+                assert.notEqual(list.indexOf(Irikla), -1, "Contains Irikla");
+                assert.notEqual(list.indexOf(Gay), -1,"Contains Gay");
+            })
+            .end(done);
+    });
+
+    it("Get neighbours tests", done => {
+        request(app)
+            .get(`/api/point/neighbours?m=30&x=51.741918&y=58.796505`)//Energetic's coordinates
+            .expect(response => {
+                const list = response.body;//JSON.parse(response.body);
+                console.log(list);
+                assert.notEqual(list.indexOf(Energetic), -1, "Contains Energetic");
+                assert.notEqual(list.indexOf(Irikla), -1, "Contains Irikla");
+                assert.equal(list.indexOf(Gay), -1,"Not contains Gay");
+            })
+            .end(done);
+    });
+
+    it("Add point tests", done => {
+        const point = {description: "Yakub", location: {coordinates: [30, 30]}};
+        request(app)
+            .post('/api/point/')
+            .send({x: 30, y: 30, info: "Yakub"})
+            .set('Accept', 'application/json')
+            //.expect('Content-Type', /json/)
+            .expect(200)
+            .end((err, res) =>
+                request(app)
+                    .get("/api/point/")
+                    .expect(response => {
+                        const list = response.body;
+                        console.log(list);
+                        const index = list.indexOf(point);
+                        assert.notEqual(index, -1, "Contains new point");
+                    })
+                    .end(done)
+            );
+    });
+
+    it("Remove Test", async done => {
+        const id = RemovingPoint._id.toString();
+        console.log(id);
+        const resp = await request(app)
+            .delete("/api/point/" + id);
+
+        console.log("Checking");
+        request(app)
+            .get("/api/point/")
+            .expect(response => {
+                const list = response.body;
+                console.log(list);
+                assert.equal(list.find(el => el._id === id), undefined, "Point removed");
+            })
+            .end(done);
+    });
+
+    it("Neighbours test", async done => {
+        request(app)
+            .get("/api/point/")
+            .expect(response => {
+                const list = response.body;//JSON.parse(response.body);
+                console.log(list);
+                assert.ok(typeof list === typeof [], "Test");
+
+                assert.notEqual(list.indexOf(Energetic), -1, "Contains Energetic");
+                assert.notEqual(list.indexOf(Irikla), -1, "Contains Irikla");
+                assert.notEqual(list.indexOf(Gay), -1,"Contains Gay");
+            })
+            .end(done);
+    });
 });

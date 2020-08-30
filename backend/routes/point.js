@@ -16,7 +16,11 @@ router.get('/',
         const page = req.query.page;
         return getPoints(count, page);
     }));
-
+/**
+ * @param x
+ * @param y
+ * @param info
+ */
 router.post('/',
     basicHandler( req => {
         console.log('add');
@@ -36,20 +40,21 @@ router.put('/',
     }));
 
 router.delete('/:id',
-    basicHandler(req => {
-        const id = req.params.id;
-        return deletePoint(id);
-    }));
+    basicHandler(req =>
+        deletePoint(req.params.id)));
 
 function basicHandler(handler) {
     return (req, res) => handler(req, res)
-        .then(result => res.send(result))
+        .then(result =>
+            res.send(result))
         .catch(error => {
-            if(error && error.length > 0) {
+            //if(error && error.length > 0) {
                 res.statusCode = 500;
                 res.send({error});
-            }
+            //}
         });
 }
+
+function checkParameters() {}
 
 module.exports = router;
