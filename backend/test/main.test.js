@@ -8,7 +8,7 @@ const app = require("../app");
 describe("Tests", () => {
     it("Get list tests", done => {
         request(app)
-            .get("/api/point/")
+            .get("/api/point?page=0&count=100")
             .expect(response => {
                 const list = response.body;//JSON.parse(response.body);
                 console.log(list);
@@ -17,6 +17,19 @@ describe("Tests", () => {
                 assert.notEqual(list.indexOf(Energetic), -1, "Contains Energetic");
                 assert.notEqual(list.indexOf(Irikla), -1, "Contains Irikla");
                 assert.notEqual(list.indexOf(Gay), -1,"Contains Gay");
+            })
+            .end(done);
+    });
+
+    it("Pagination tests", done => {
+        request(app)
+            .get("/api/point?count=2&page=0")
+            .expect(response => {
+                const list = response.body;//JSON.parse(response.body);
+                console.log(list);
+                assert.ok(typeof list === typeof [], "Response type is list");
+
+                assert.equal(list.length, 2,"Correct points count");
             })
             .end(done);
     });
@@ -69,6 +82,17 @@ describe("Tests", () => {
                 console.log(list);
                 assert.equal(list.find(el => el._id === id), undefined, "Point removed");
             })
+            .end(done);
+    });
+
+    it("Incorrect request test", done => {
+        request(app)
+            .post('/api/point/')
+            .send({x: 30, info: "t"})
+            .set('Accept', 'application/json')
+            //.expect('Content-Type', /json/)
+            .expect(400)
+            .expect({error: "Parameter y is missed" })
             .end(done);
     });
 

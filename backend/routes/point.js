@@ -10,18 +10,19 @@ router.get('/neighbours',
         return getNeighbours(m, {x, y});
     }));
 
-router.get('/',
+router.get('/', checkParameters('query', 'page', 'count'),
     basicHandler( req => {
-        const count = req.query.count;
-        const page = req.query.page;
+        const count = Number.parseInt(req.query.count);
+        const page = Number.parseInt(req.query.page);
         return getPoints(count, page);
     }));
 /**
+ * Create new point with following attributes
  * @param x
  * @param y
- * @param info
+ * @param info - entity description
  */
-router.post('/',
+router.post('/', checkParameters('body', 'x', 'y', 'info'),
     basicHandler( req => {
         console.log('add');
         const x = req.body.x;
@@ -29,8 +30,15 @@ router.post('/',
         const y = req.body.y;
         return savePoint(x, y, description)
     }));
-
-router.put('/',
+/**
+ * Edit existing point
+ * @param id - entity identifier
+ * New attributes:
+ * @param x
+ * @param y
+ * @param info - entity description
+ */
+router.put('/', checkParameters('body', 'x', 'y', 'info', 'id'),
     basicHandler(req => {
         const x = req.body.x;
         const y = req.body.y;
@@ -39,7 +47,7 @@ router.put('/',
         return updatePoint({id: req.body.id, x, y, description})
     }));
 
-router.delete('/:id',
+router.delete('/:id', checkParameters('params', 'id'),
     basicHandler(req =>
         deletePoint(req.params.id)));
 
@@ -55,6 +63,16 @@ function basicHandler(handler) {
         });
 }
 
-function checkParameters() {}
+function checkParameters(parameterPlace, ...params) {
+    return (req, res, next) => {
+        for (let param of params)
+            if(!req[parameterPlace][param]) {
+                res.statusCode = 400;
+                res.send({error: `Parameter ${param} is missed`});
+                return;
+            }
+        next();
+    };
+}
 
 module.exports = router;
