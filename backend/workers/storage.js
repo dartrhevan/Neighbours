@@ -19,7 +19,7 @@ const dbResultLessCallBack = (error, resolve, reject) => {
 function savePoint(x, y, description) {//point = {x, y, info}
     console.log(description);
     const point = new Point({description, location: { coordinates: [x, y] }});
-    return new Promise(((resolve, reject) => point.save((e, r) => dbResultLessCallBack(e, r, resolve, reject))));
+    return new Promise(((resolve, reject) => point.save(e => dbResultLessCallBack(e, resolve, reject))));
 }
 
 function getPoints(pageSize, page) {
@@ -32,12 +32,12 @@ function updatePoint(point) {
     console.log(point.description);
     return new Promise((resolve, reject) =>
         Point.findByIdAndUpdate(point.id,{description: point.description,
-                location: {type: "Point", coordinates: [point.x, point.y]}}, (e, r) => dbResultLessCallBack(e, r, resolve, reject)));
+                location: {type: "Point", coordinates: [point.x, point.y]}}, e => dbResultLessCallBack(e, resolve, reject)));
 }
 
 function deletePoint(id) {
     return new Promise((resolve, reject) =>
-        Point.findByIdAndRemove(id, (e, r) => dbResultLessCallBack(e, r, resolve, reject)));
+        Point.findByIdAndRemove(id, e => dbResultLessCallBack(e, resolve, reject)));
 }
 
 function getNeighbours(m, point) {

@@ -1,4 +1,4 @@
-#language: node_js
+language: node_js
 
 #node_js:
 #  - "7.4.0"
@@ -18,8 +18,8 @@ before_install:
 jobs:
   include:
     - stage: test
-      script: 
-        - npm install 
+      script:
+        - npm install
         - npm run test #--prefix ./backend
     - stage: deploy to production
       deploy:
