@@ -17,10 +17,10 @@ before_install:
 
 jobs:
   include:
-    - stage: test
-      script:
-        - npm install
-        - npm run test #--prefix ./backend
+    #- stage: test
+    #  script:
+    #    - npm install
+    #    - npm run test #--prefix ./backend
     - stage: deploy to production
       deploy:
         provider: heroku
