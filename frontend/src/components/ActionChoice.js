@@ -25,8 +25,7 @@ export default function ActionChoice(props) {
     const handleChange = (event, newValue) =>
         setValue(newValue);
 
-    return (
-            <TabContext value={value}>
+    return (<TabContext value={value}>
                 <AppBar className={classes.bar} position="static">
                     <h2 className={classes.h}>Neighbours test</h2>
                     <TabList
@@ -42,6 +41,5 @@ export default function ActionChoice(props) {
                 <TabPanel value="0">Add point</TabPanel>
                 <TabPanel value="1">Get neighbours</TabPanel>
 
-            </TabContext>
-    )
+            </TabContext>);
 }

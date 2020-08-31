@@ -7,7 +7,10 @@ import PointTable from './components/Table'
 const useStyles = makeStyles(theme =>
     createStyles({
         root: {
-            flexGrow: 1,
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            flexDirection: "row"
         },
         appBar: {
             zIndex: theme.zIndex.drawer + 1,
@@ -33,10 +36,11 @@ const useStyles = makeStyles(theme =>
 
 function App() {
   const classes = useStyles();
-  return (
-    <div className={classes.root}>
+  return (<div>
         <ActionChoice />
-        <PointTable />
+        <div className={classes.root}>
+            <PointTable />
+        </div>
     </div>
   );
 }

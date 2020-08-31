@@ -2,8 +2,78 @@ import React from 'react'
 import MaterialTable, { Column } from 'material-table';
 import Typography from "@material-ui/core/Typography";
 import Link from "@material-ui/core/Link";
-import { Info, Edit, Delete } from "@material-ui/icons";
+import {
+    Info,
+    Edit,
+    Delete,
+    FirstPage,
+    LastPage,
+    KeyboardArrowRight,
+    KeyboardArrowLeft,
+    Search, Clear, Check, ArrowDownward, Close
+} from "@material-ui/icons";
 import { createStyles, makeStyles } from "@material-ui/core/styles";
+import {listPoints} from "../apiCalls";
+
+const innerProps = {
+    localization: {
+        pagination: {
+            labelDisplayedRows: '{from}-{to} из {count}',
+            labelRowsPerPage: 'Строк на странице',
+            labelRowsSelect: 'строк',
+            firstAriaLabel: 'Первая страница',
+            firstTooltip: 'Первая страница',
+            previousAriaLabel: 'Предыдущая страница',
+            previousTooltip: 'Предыдущая страница',
+            nextAriaLabel: 'Следующая страница',
+            nextTooltip: 'Следующая страница',
+            lastAriaLabel: 'Последняя страница',
+            lastTooltip: 'Последняя страница',
+        },
+        header: {
+            actions: '',
+        },
+        body: {
+            editTooltip: 'Редактировать',
+            emptyDataSourceMessage: 'Нет записей',
+            filterRow: {
+                filterTooltip: 'Фильтр',
+            },
+            editRow: {
+                deleteText: 'Вы действительно хотите удалить эту запись?',
+                cancelTooltip: 'Отмена',
+                saveTooltip: 'Подтверждение',
+            },
+            deleteTooltip: 'Удалить запись',
+        },/*
+        toolbar: {
+            searchTooltip: 'Поиск',
+            searchPlaceholder: 'Поиск',
+        },*/
+    },
+    options: {
+        pageSize: 8,
+        pageSizeOptions: [8, 16, 25],
+        search: false,
+        debounceInterval: 500,
+        toolbarButtonAlignment: 'right',
+        draggable: false,
+    },
+    icons: {
+        FirstPage,
+        LastPage,
+        NextPage: KeyboardArrowRight,
+        PreviousPage: KeyboardArrowLeft,
+        Search,
+        Filter: Search,
+        Delete,
+        Clear,
+        Check,
+        SortArrow: ArrowDownward,
+        ResetSearch: Close,
+        Edit,
+    },
+};
 
 const tableColumns = [
     {
@@ -40,64 +110,45 @@ const tableActions = [
 
 const tableData = query =>
     new Promise((resolve => {
-        /*getTimeZones({query, objectGuid, filters})
-            .then((response) => {
-                resolve({
-                    data: response.data,
-                    page: parseInt(response.headers['x-current-page'], 10) - 1,
-                    totalCount: parseInt(response.headers['x-total-count'], 10),
-                });
-            })
-            .catch(() => {
-                resolve({
-                    data: [],
-                    page: 0,
-                    totalCount: 0,
-                });
-            });*/
-        resolve({
-            data: [
-                {
-                    description: "fewwf",
-                    x: 5,
-                    y: 4
-                }
-            ],
+        listPoints().then(r => resolve({
+            data: r.map(p => ({
+                description: p.description,
+                x: p.location.coordinates[0],
+                y: p.location.coordinates[1]
+            })),
             page: 0,
             totalCount: 7
-        });
+        }));
     }));
 
 const useStyles = makeStyles(theme =>
     createStyles({
         tableTitle: {}
-    }),
-);
+    }));
 
 export default function PointTable(props) {
     const classes = useStyles();
     const tableRef = React.createRef();
     return (<MaterialTable
-        ref={tableRef}
-        title={
-            <Typography
-                variant="h6"
-                gutterBottom
-                className={classes.tableTitle}>
-                Объекты и координаты
-            </Typography>
-        }
-        columns={tableColumns}
-        actions={tableActions}
-        data={tableData}
-        options={{
-            search: true,
-            debounceInterval: 500,
-            pageSize: tableRef.current
-                ? tableRef.current.state.pageSize
-                : 8,
-        }}
-        style={{width: '100%'}}>
-
-    </MaterialTable>);
+    {...innerProps}
+    ref={tableRef}
+    title={<Typography
+            variant="h6"
+            gutterBottom
+            className={classes.tableTitle}>
+            Объекты и координаты
+        </Typography>}
+    columns={tableColumns}
+    data={tableData}
+    actions={tableActions}
+    options={{
+        search: false,
+        filtering: false,
+        debounceInterval: 500,
+        actionsColumnIndex: -1,
+        pageSize: tableRef.current
+            ? tableRef.current.state.pageSize
+            : 8
+    }}
+    style={{width: '80%'}}/>);
 }
