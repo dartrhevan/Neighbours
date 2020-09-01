@@ -64,6 +64,15 @@ export default function App(props) {
         setValue(newValue);
 
 
+    const tableRef = React.createRef();
+    console.log(tableRef);
+    const updateTable = () => {
+        if (tableRef.current) {
+            console.log('update table');
+            tableRef.current.dataManager.searchText = '';
+            tableRef.current.onQueryChange({ page: 0, search: '' });
+        }
+    };
     const GetNeighboursForm = props => (<Paper className={classes.form}>
         <Typography>Get object's neighbours</Typography>
         <TextField className={classes.input} id="outlined-basic" label="X" variant="outlined" />
@@ -85,9 +94,10 @@ export default function App(props) {
         </AppBar>
 
         <Container className={classes.root}>
-            <TabPanel style={{width: "100%"}} value="0"><PointForm /></TabPanel>
+            <TabPanel style={{width: "100%"}} value="0"><PointForm onUpdate={updateTable} /></TabPanel>
             <TabPanel style={{width: "100%"}} value="1"><GetNeighboursForm /></TabPanel>
             <PointTable
+                tableRef={tableRef}
                 data={tableData} />
         </Container>
 

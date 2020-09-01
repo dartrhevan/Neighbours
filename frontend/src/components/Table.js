@@ -113,9 +113,11 @@ const useStyles = makeStyles(theme =>
         tableTitle: {}
     }));
 
+
 export default function PointTable(props) {
     const classes = useStyles();
-    const tableRef = React.createRef();
+    console.log(props)
+    const tableRef = props.tableRef;// React.createRef();
     return (<MaterialTable
     {...innerProps}
     {...props}

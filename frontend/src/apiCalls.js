@@ -37,8 +37,9 @@ export function getNeighbours(point) {
 function baseRequest(url, init) {
     return fetch(url, init)
         .then(async r => {
+            console.log(r);
             if(!r.ok)
-                alert((await r.json()).error)
+                alert((await r.json()).error);
             return r.json();
         })
         .catch(alert);

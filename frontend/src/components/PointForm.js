@@ -4,7 +4,7 @@ import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import React from "react";
 import { createStyles, makeStyles } from "@material-ui/core/styles";
-import { savePoint } from "../apiCalls";
+import { savePoint, updatePoint } from "../apiCalls";
 
 
 const useStyles = makeStyles(theme =>
@@ -23,7 +23,7 @@ function checkFloatValidity(float) {
     return /^\d+[.]\d+$/.test(float) || /^\d+$/.test(float);
 }
 
-export default function ({initX, initY, initDesc}) {
+export default function ({initX = '', initY = '', initDesc = '', onUpdate}) {
     const classes = useStyles();
     const [x, setX] = React.useState(initX);
     const [y, setY] = React.useState(initY);
@@ -33,7 +33,8 @@ export default function ({initX, initY, initDesc}) {
         if(!(checkFloatValidity(x) && checkFloatValidity(y)))
             alert('Incorrect coordinates');
         else
-            savePoint({x, y, description});
+            savePoint({x, y, description})
+                .then(r => onUpdate());
     }
 
     return <Paper className={classes.form}>
