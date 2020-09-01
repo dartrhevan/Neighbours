@@ -13,7 +13,7 @@ import {
     Search, Clear, Check, ArrowDownward, Close
 } from "@material-ui/icons";
 import { createStyles, makeStyles } from "@material-ui/core/styles";
-import {listPoints} from "../apiCalls";
+import { deletePoint, listPoints } from "../apiCalls";
 
 const innerProps = {
     localization: {
@@ -93,20 +93,6 @@ const tableColumns = [
     }
 ];
 
-const tableActions = [
-    {
-        icon: () => <Edit/>,
-        onClick: (event, objectData) => {
-        },
-        tooltip: 'Редактировать объект',
-    },
-    {
-        icon: () => <Delete/>,
-        onClick: (event, objectData) => {
-        },
-        tooltip: 'Удалить объект',
-    },
-];
 
 const useStyles = makeStyles(theme =>
     createStyles({
@@ -116,7 +102,24 @@ const useStyles = makeStyles(theme =>
 
 export default function PointTable(props) {
     const classes = useStyles();
-    console.log(props)
+    console.log(props);
+    const tableActions = [
+        {
+            icon: () => <Edit/>,
+            onClick: (event, objectData) => {
+            },
+            tooltip: 'Редактировать объект',
+        },
+        {
+            icon: () => <Delete/>,
+            onClick: (event, objectData) => {
+                console.log(objectData);
+                deletePoint(objectData.id)
+                    .then(r => props.onUpdate())
+            },
+            tooltip: 'Удалить объект',
+        },
+    ];
     const tableRef = props.tableRef;// React.createRef();
     return (<MaterialTable
     {...innerProps}

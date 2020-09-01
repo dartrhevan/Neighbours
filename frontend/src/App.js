@@ -50,7 +50,8 @@ const tableData = query =>
             data: r.map(p => ({
                 description: p.description,
                 x: p.location.coordinates[0],
-                y: p.location.coordinates[1]
+                y: p.location.coordinates[1],
+                id: p._id
             })),
             page: 0,
             totalCount: 7
@@ -97,6 +98,7 @@ export default function App(props) {
             <TabPanel style={{width: "100%"}} value="0"><PointForm onUpdate={updateTable} /></TabPanel>
             <TabPanel style={{width: "100%"}} value="1"><GetNeighboursForm /></TabPanel>
             <PointTable
+                onUpdate={updateTable}
                 tableRef={tableRef}
                 data={tableData} />
         </Container>
