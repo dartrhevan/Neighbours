@@ -7,7 +7,7 @@ const headers = {
 export function savePoint(point) {
     return baseRequest(baseUrl, {
         method: 'POST',
-        body: point,
+        body: JSON.stringify(point),
         headers: headers,
     });
 }
@@ -15,7 +15,7 @@ export function savePoint(point) {
 export function updatePoint(point) {
     return baseRequest(baseUrl, {
         method: 'PUT',
-        body: point,
+        body: JSON.stringify(point),
         headers: headers,
     });
 }

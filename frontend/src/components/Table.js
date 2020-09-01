@@ -108,19 +108,6 @@ const tableActions = [
     },
 ];
 
-const tableData = query =>
-    new Promise((resolve => {
-        listPoints().then(r => resolve({
-            data: r.map(p => ({
-                description: p.description,
-                x: p.location.coordinates[0],
-                y: p.location.coordinates[1]
-            })),
-            page: 0,
-            totalCount: 7
-        }));
-    }));
-
 const useStyles = makeStyles(theme =>
     createStyles({
         tableTitle: {}
@@ -131,6 +118,7 @@ export default function PointTable(props) {
     const tableRef = React.createRef();
     return (<MaterialTable
     {...innerProps}
+    {...props}
     ref={tableRef}
     title={<Typography
             variant="h6"
@@ -139,7 +127,6 @@ export default function PointTable(props) {
             Объекты и координаты
         </Typography>}
     columns={tableColumns}
-    data={tableData}
     actions={tableActions}
     options={{
         search: false,
@@ -150,5 +137,5 @@ export default function PointTable(props) {
             ? tableRef.current.state.pageSize
             : 8
     }}
-    style={{width: '80%'}}/>);
+    style={{ width: '100%', margin: 15 }} />);
 }

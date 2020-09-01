@@ -22,11 +22,11 @@ router.get('/', checkParameters('query', 'page', 'count'),
  * @param y
  * @param info - entity description
  */
-router.post('/', checkParameters('body', 'x', 'y', 'info'),
+router.post('/', checkParameters('body', 'x', 'y', 'description'),
     basicHandler( req => {
         console.log('add');
         const x = req.body.x;
-        const description = req.body.info;
+        const description = req.body.description;
         const y = req.body.y;
         return savePoint(x, y, description)
     }));
@@ -38,11 +38,11 @@ router.post('/', checkParameters('body', 'x', 'y', 'info'),
  * @param y
  * @param info - entity description
  */
-router.put('/', checkParameters('body', 'x', 'y', 'info', 'id'),
+router.put('/', checkParameters('body', 'x', 'y', 'description', 'id'),
     basicHandler(req => {
         const x = req.body.x;
         const y = req.body.y;
-        const description = req.body.info;
+        const description = req.body.description;
         console.log('put');
         return updatePoint({id: req.body.id, x, y, description})
     }));
