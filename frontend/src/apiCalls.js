@@ -32,8 +32,8 @@ export function listPoints(page, count) {
     return baseRequest(`${baseUrl}?page=${page}&count=${count}`);
 }
 
-export function getNeighbours(point) {
-    return baseRequest(`${baseUrl}/neighbours?x=${point.x}&y=${point.y}`);
+export function getNeighbours(point, radius) {
+    return baseRequest(`${baseUrl}/neighbours?x=${point.x}&y=${point.y}&m=${radius}`);
 }
 
 function baseRequest(url, init) {

@@ -6,15 +6,12 @@ import Tab from "@material-ui/core/Tab";
 import TabPanel from "@material-ui/lab/TabPanel";
 import { createStyles, makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
-import TextField from "@material-ui/core/TextField";
-import Typography from "@material-ui/core/Typography";
-import Paper from "@material-ui/core/Paper";
 import PointTable from "./components/Table";
 import './index.css'
-import Button from "@material-ui/core/Button";
-import { listPoints, savePoint, updatePoint } from "./apiCalls";
+import { listPoints, savePoint, updatePoint, getNeighbours } from "./apiCalls";
 import PointForm from "./components/PointForm";
 import { checkFloatValidity } from "./CheckFloatValidity";
+import GetNeighboursForm from "./components/GetNeighboursForm";
 
 const useStyles = makeStyles(theme =>
     createStyles({
@@ -43,10 +40,10 @@ const useStyles = makeStyles(theme =>
         }
     }),
 );
-
-const tableData = query =>
+//TODO: Adjust pagination
+const listData = (query = {page: 0, pageSize: 7}) =>
     new Promise((resolve => {
-        listPoints(0, 5).then(r => resolve({
+        listPoints(0, 7/*query.page, query.pageSize*/).then(r => resolve({
             data: r.map(p => ({
                 description: p.description,
                 x: p.location.coordinates[0],
@@ -54,16 +51,25 @@ const tableData = query =>
                 id: p._id
             })),
             page: 0,
-            totalCount: 7
+            totalCount: 45
         }));
     }));
+
+//const defaultSearchData = {point: {}}
 
 export default function App(props) {
     const classes = useStyles();
     const [value, setValue] = React.useState("0");
-    const handleChange = (event, newValue) =>
-        setValue(newValue);
+    const [gettingNeighbours, setGettingNeighbours] = React.useState(false);
+    //const [neighbours, setNeighbours] = React.useState([]);
+    const [searchData, setSearchData] = React.useState(null);
 
+    const handleChange = (event, newValue) => {
+        setValue(newValue);
+        setGettingNeighbours(newValue === '1');
+        setSearchData(null);
+        updateTable();
+    };
 
     const tableRef = React.createRef();
     console.log(tableRef);
@@ -74,6 +80,44 @@ export default function App(props) {
             tableRef.current.onQueryChange({ page: 0, search: '' });
         }
     };
+
+    const listNeighbours = query =>
+        new Promise((resolve => {
+            if (searchData)
+                getNeighbours(searchData.point, searchData.radius)
+                    .then(r => resolve({
+                        data: r.map(p => ({
+                            description: p.description,
+                            x: p.location.coordinates[0],
+                            y: p.location.coordinates[1],
+                            id: p._id
+                        })),
+                        page: 0,
+                        totalCount: r.length
+                    }));
+            else resolve({data: [], page: 0, totalCount: 0})
+        }));
+
+    function onGetNeighbours(x, y, radius) {
+        if(!(checkFloatValidity(x) && checkFloatValidity(y) && checkFloatValidity(radius)))
+            alert('Incorrect coordinates');
+        else
+            // noinspection JSCheckFunctionSignatures
+        {
+            setSearchData({point: {x, y}, radius});
+            updateTable();
+        }
+            /*getNeighbours({x, y}, radius)
+                .then(r => {
+                    //setNeighbours(r);
+                    updateTable();
+                });*/
+    }
+
+    function tableData(query) {
+        return gettingNeighbours ?
+            listNeighbours(query) : listData(query);
+    }
 
     function sendNewPoint(x, y, description) {
         if(!(checkFloatValidity(x) && checkFloatValidity(y)))
@@ -91,14 +135,6 @@ export default function App(props) {
                 .then(r => updateTable());
     }
 
-
-    const GetNeighboursForm = props => (<Paper className={classes.form}>
-        <Typography>Get object's neighbours</Typography>
-        <TextField className={classes.input} id="outlined-basic" label="X" variant="outlined" />
-        <TextField className={classes.input} id="outlined-basic" label="Y" variant="outlined" />
-        <Button variant='contained' color="primary">List</Button>
-    </Paper>);
-
     return (<TabContext value={value}>
         <AppBar className={classes.bar} position="static">
             <h2 className={classes.h}>Neighbours test</h2>
@@ -115,7 +151,7 @@ export default function App(props) {
         <Container className={classes.root}>
             <TabPanel style={{width: "100%"}} value="0"><PointForm onUpdate={updateTable}
                                                                    onSave={sendNewPoint} /></TabPanel>
-            <TabPanel style={{width: "100%"}} value="1"><GetNeighboursForm /></TabPanel>
+            <TabPanel style={{width: "100%"}} value="1"><GetNeighboursForm onGetNeighbours={onGetNeighbours} /></TabPanel>
             <PointTable
                 onUpdate={updateTable}
                 updatePoint={editPoint}
