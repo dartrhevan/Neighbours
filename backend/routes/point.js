@@ -43,7 +43,7 @@ router.put('/', checkParameters('body', 'x', 'y', 'description', 'id'),
         const x = req.body.x;
         const y = req.body.y;
         const description = req.body.description;
-        console.log('put');
+        //console.log('put: ' + req.body.id);
         return updatePoint({id: req.body.id, x, y, description})
     }));
 

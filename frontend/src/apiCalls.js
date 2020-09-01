@@ -1,5 +1,6 @@
 
 const baseUrl = '/api/point';
+
 const headers = {
     'Content-Type': 'application/json'
 };
@@ -8,15 +9,16 @@ export function savePoint(point) {
     return baseRequest(baseUrl, {
         method: 'POST',
         body: JSON.stringify(point),
-        headers: headers,
+        headers,
     });
 }
 
 export function updatePoint(point) {
+    console.log(point);
     return baseRequest(baseUrl, {
         method: 'PUT',
         body: JSON.stringify(point),
-        headers: headers,
+        headers,
     });
 }
 

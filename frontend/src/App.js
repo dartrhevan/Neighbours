@@ -12,9 +12,9 @@ import Paper from "@material-ui/core/Paper";
 import PointTable from "./components/Table";
 import './index.css'
 import Button from "@material-ui/core/Button";
-import { listPoints } from "./apiCalls";
-import MaterialTable from "material-table";
+import { listPoints, savePoint, updatePoint } from "./apiCalls";
 import PointForm from "./components/PointForm";
+import { checkFloatValidity } from "./CheckFloatValidity";
 
 const useStyles = makeStyles(theme =>
     createStyles({
@@ -74,6 +74,24 @@ export default function App(props) {
             tableRef.current.onQueryChange({ page: 0, search: '' });
         }
     };
+
+    function sendNewPoint(x, y, description) {
+        if(!(checkFloatValidity(x) && checkFloatValidity(y)))
+            alert('Incorrect coordinates');
+        else
+            savePoint({x, y, description})
+                .then(r => updateTable());
+    }
+
+    function editPoint(x, y, description, id) {
+        if(!(checkFloatValidity(x) && checkFloatValidity(y)))
+            alert('Incorrect coordinates');
+        else
+            updatePoint({x, y, description, id})
+                .then(r => updateTable());
+    }
+
+
     const GetNeighboursForm = props => (<Paper className={classes.form}>
         <Typography>Get object's neighbours</Typography>
         <TextField className={classes.input} id="outlined-basic" label="X" variant="outlined" />
@@ -95,10 +113,12 @@ export default function App(props) {
         </AppBar>
 
         <Container className={classes.root}>
-            <TabPanel style={{width: "100%"}} value="0"><PointForm onUpdate={updateTable} /></TabPanel>
+            <TabPanel style={{width: "100%"}} value="0"><PointForm onUpdate={updateTable}
+                                                                   onSave={sendNewPoint} /></TabPanel>
             <TabPanel style={{width: "100%"}} value="1"><GetNeighboursForm /></TabPanel>
             <PointTable
                 onUpdate={updateTable}
+                updatePoint={editPoint}
                 tableRef={tableRef}
                 data={tableData} />
         </Container>

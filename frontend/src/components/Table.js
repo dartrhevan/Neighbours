@@ -1,7 +1,7 @@
 import React from 'react'
 import MaterialTable, { Column } from 'material-table';
 import Typography from "@material-ui/core/Typography";
-import Link from "@material-ui/core/Link";
+import PointForm from "./PointForm";
 import {
     Info,
     Edit,
@@ -13,7 +13,9 @@ import {
     Search, Clear, Check, ArrowDownward, Close
 } from "@material-ui/icons";
 import { createStyles, makeStyles } from "@material-ui/core/styles";
-import { deletePoint, listPoints } from "../apiCalls";
+import Dialog from "@material-ui/core/Dialog";
+import {deletePoint} from "../apiCalls";
+import Button from "@material-ui/core/Button";
 
 const innerProps = {
     localization: {
@@ -79,7 +81,7 @@ const tableColumns = [
     {
         title: 'Описание',
         field: "description",
-        defaultSort: 'asc'
+        sorting: false,
     },
     {
         title: 'X',
@@ -99,15 +101,16 @@ const useStyles = makeStyles(theme =>
         tableTitle: {}
     }));
 
+const defaultEditObject = {x: '', y: '', description: ''};
 
 export default function PointTable(props) {
     const classes = useStyles();
     console.log(props);
+    const [editObject, setEditObject] = React.useState(defaultEditObject);
     const tableActions = [
         {
             icon: () => <Edit/>,
-            onClick: (event, objectData) => {
-            },
+            onClick: (event, objectData) => setEditObject(objectData),
             tooltip: 'Редактировать объект',
         },
         {
@@ -120,27 +123,39 @@ export default function PointTable(props) {
             tooltip: 'Удалить объект',
         },
     ];
+
     const tableRef = props.tableRef;// React.createRef();
-    return (<MaterialTable
-    {...innerProps}
-    {...props}
-    ref={tableRef}
-    title={<Typography
-            variant="h6"
-            gutterBottom
-            className={classes.tableTitle}>
-            Объекты и координаты
-        </Typography>}
-    columns={tableColumns}
-    actions={tableActions}
-    options={{
-        search: false,
-        filtering: false,
-        debounceInterval: 500,
-        actionsColumnIndex: -1,
-        pageSize: tableRef.current
-            ? tableRef.current.state.pageSize
-            : 8
-    }}
-    style={{ width: '100%', margin: 15 }} />);
+
+    const onSave = (x, y, d) => {
+        setEditObject(defaultEditObject);
+        props.updatePoint(x, y, d, editObject.id);
+    };
+
+    return (<>
+        <MaterialTable
+            {...innerProps}
+            {...props}
+            ref={tableRef}
+            title={<Typography
+                variant="h6"
+                gutterBottom
+                className={classes.tableTitle}>
+                Объекты и координаты
+            </Typography>}
+            columns={tableColumns}
+            actions={tableActions}
+            options={{
+                search: false,
+                filtering: false,
+                debounceInterval: 500,
+                actionsColumnIndex: -1,
+                pageSize: tableRef.current
+                    ? tableRef.current.state.pageSize
+                    : 8
+            }}
+            style={{width: '100%', margin: 15}}/>
+        <Dialog open={editObject !== defaultEditObject} onClose={e => setEditObject(defaultEditObject)}>
+            <PointForm onClose={e => setEditObject(defaultEditObject)} initData={editObject} onSave={onSave}/>
+        </Dialog>
+    </>);
 }

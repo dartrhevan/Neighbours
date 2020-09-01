@@ -4,8 +4,6 @@ import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import React from "react";
 import { createStyles, makeStyles } from "@material-ui/core/styles";
-import { savePoint, updatePoint } from "../apiCalls";
-
 
 const useStyles = makeStyles(theme =>
     createStyles({
@@ -15,26 +13,21 @@ const useStyles = makeStyles(theme =>
         input: {
             margin: 10,
             width: '95%'
+        },
+        button: {
+            margin: 10
         }
     }),
 );
 
-function checkFloatValidity(float) {
-    return /^\d+[.]\d+$/.test(float) || /^\d+$/.test(float);
-}
-
-export default function ({initX = '', initY = '', initDesc = '', onUpdate}) {
+export default function ({initData = {x: '', y: '', description: ''}, onSave, onClose = null}) {
     const classes = useStyles();
-    const [x, setX] = React.useState(initX);
-    const [y, setY] = React.useState(initY);
-    const [description, setDescription] = React.useState(initDesc);
+    const [x, setX] = React.useState(initData.x);
+    const [y, setY] = React.useState(initData.y);
+    const [description, setDescription] = React.useState(initData.description);
 
     function send() {
-        if(!(checkFloatValidity(x) && checkFloatValidity(y)))
-            alert('Incorrect coordinates');
-        else
-            savePoint({x, y, description})
-                .then(r => onUpdate());
+        onSave(x, y, description);
     }
 
     return <Paper className={classes.form}>
@@ -42,6 +35,7 @@ export default function ({initX = '', initY = '', initDesc = '', onUpdate}) {
         <TextField className={classes.input} onChange={e => setDescription(e.target.value)} value={description} id="outlined-basic" label="Description" variant="outlined"/>
         <TextField className={classes.input} onChange={e => setX(e.target.value)} value={x} id="outlined-basic" label="X" variant="outlined"/>
         <TextField className={classes.input} onChange={e => setY(e.target.value)} value={y} id="outlined-basic" label="Y" variant="outlined"/>
-        <Button variant='contained' color="primary" onClick={send}>Save</Button>
+        <Button className={classes.button} variant='contained' color="primary" onClick={send}>Save</Button>
+        {onClose && <Button className={classes.button} variant='contained' color="primary" onClick={onClose}>Cancel</Button>}
     </Paper>;
 };
