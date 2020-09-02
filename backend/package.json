@@ -14,6 +14,7 @@
     "mongoose": "^5.10.0",
     "supertest": "latest",
     "jest": "^26.4.2",
-    "@jest/globals": "latest"
+    "@jest/globals": "latest",
+    "dotenv": "latest"
   }
 }

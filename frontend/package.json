@@ -12,6 +12,7 @@
     "@material-ui/lab": "latest",
     "babel-loader": "^8.1.0",
     "css-loader": "^4.2.2",
+    "html-webpack-plugin": "^4.4.1",
     "material-table": "latest",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
@@ -22,7 +23,8 @@
   "scripts": {
     "start": "react-scripts start",
     "npm-build": "react-scripts build",
-    "build": "webpack"
+    "build": "webpack",
+    "wp-start": "webpack-dev-server --mode development --open --hot"
   },
   "eslintConfig": {
     "extends": "react-app"

@@ -1,42 +1,13 @@
-/*const FilterWarningsPlugin = require('webpack-filter-warnings-plugin');
-const webpack = require('webpack');
-
-module.exports = {
-    // ... rest of webpack config
-    stats: {
-        warningsFilter: [/critical dependency:/i],
-    },
-    plugins: [
-        new FilterWarningsPlugin({
-            //exclude: /any-warnings-matching-this-will-be-hidden/
-            exclude: /Critical dependency: the request of a dependency is an expression/
-        }),
-        new webpack.ContextReplacementPlugin(
-            /^\.$/,
-            (context) => {
-                if (/\/node_modules\/mocha\/lib/.test(context.context)) {//ensure we're only doing this for modules we know about
-                    context.regExp = /this_should_never_exist/
-                    for (const d of context.dependencies) {
-                        if (d.critical) d.critical = false;
-                    }
-                }
-            }
-        )
-    ]
-};
-
-*/
-
-
 'use strict';
 const FilterWarningsPlugin = require('webpack-filter-warnings-plugin');
+
+const HtmlWebpackPlugin = require("html-webpack-plugin");
 //const webpack = require('webpack');
-const path = require('path');
 const webpack = require('webpack');
 
 /**@type {import('webpack').Configuration}*/
 const config = {
-    target: 'node', // vscode extensions run in a Node.js-context 📖 -> https://webpack.js.org/configuration/node/
+    target: 'web', // vscode extensions run in a Node.js-context 📖 -> https://webpack.js.org/configuration/node/
 // the entry point of this extension, 📖 -> https://webpack.js.org/configuration/entry-context/
     /*output: {
         // the bundle is stored in the 'dist' folder (check package.json), 📖 -> https://webpack.js.org/configuration/output/
@@ -87,7 +58,11 @@ const config = {
     output: {
         filename: "./index.js"
     },
+    //target: 'web'
     plugins: [
+        new HtmlWebpackPlugin({
+            template: "./public/index.html"
+        }),
         new FilterWarningsPlugin({
             //exclude: /any-warnings-matching-this-will-be-hidden/
             exclude: /Critical dependency: the request of a dependency is an expression/

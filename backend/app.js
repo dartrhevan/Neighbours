@@ -1,11 +1,11 @@
+require('dotenv').config();
 const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const mongoose = require('mongoose');
 
-mongoose.connect('mongodb://localhost:27017/db1');
-mongoose.set('useNewUrlParser', true);
+mongoose.connect(process.env.DB_CONNECTION_URL, {useNewUrlParser: true});
 mongoose.set('useCreateIndex', true);
 
 const pointRouter = require('./routes/point');
