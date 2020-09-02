@@ -20,7 +20,7 @@ const useStyles = makeStyles(theme =>
     }),
 );
 
-export default function ({initData = {x: '', y: '', description: ''}, onSave, onClose = null}) {
+export default function ({initData = {x: '', y: '', description: ''}, title = "Добавить новый объект", onSave, onClose = null}) {
     const classes = useStyles();
     const [x, setX] = React.useState(initData.x);
     const [y, setY] = React.useState(initData.y);
@@ -31,11 +31,11 @@ export default function ({initData = {x: '', y: '', description: ''}, onSave, on
     }
 
     return <Paper className={classes.form}>
-        <Typography>Add new object</Typography>
-        <TextField className={classes.input} onChange={e => setDescription(e.target.value)} value={description} id="outlined-basic" label="Description" variant="outlined"/>
+        <Typography>{title}</Typography>
+        <TextField className={classes.input} onChange={e => setDescription(e.target.value)} value={description} id="outlined-basic" label="Описание" variant="outlined"/>
         <TextField className={classes.input} onChange={e => setX(e.target.value)} value={x} id="outlined-basic" label="X" variant="outlined"/>
         <TextField className={classes.input} onChange={e => setY(e.target.value)} value={y} id="outlined-basic" label="Y" variant="outlined"/>
-        <Button className={classes.button} variant='contained' color="primary" onClick={send}>Save</Button>
-        {onClose && <Button className={classes.button} variant='contained' color="primary" onClick={onClose}>Cancel</Button>}
+        <Button className={classes.button} variant='contained' color="primary" onClick={send}>Сохранить</Button>
+        {onClose && <Button className={classes.button} variant='contained' color="primary" onClick={onClose}>Отмена</Button>}
     </Paper>;
 };

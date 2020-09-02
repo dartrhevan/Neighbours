@@ -16,7 +16,6 @@ import GetNeighboursForm from "./components/GetNeighboursForm";
 const useStyles = makeStyles(theme =>
     createStyles({
         root: {
-            //padding: '0 10',
             width: '80%',
             display: 'flex',
             alignItems: 'center',
@@ -41,27 +40,24 @@ const useStyles = makeStyles(theme =>
     }),
 );
 //TODO: Adjust pagination
-const listData = (query = {page: 0, pageSize: 7}) =>
+const listData = (query = {page: 0, pageSize: 8}) =>
     new Promise((resolve => {
-        listPoints(0, 7/*query.page, query.pageSize*/).then(r => resolve({
+        listPoints(query.page, query.pageSize).then(r => resolve({
             data: r.map(p => ({
                 description: p.description,
                 x: p.location.coordinates[0],
                 y: p.location.coordinates[1],
                 id: p._id
             })),
-            page: 0,
+            page: query.page,
             totalCount: 45
         }));
     }));
-
-//const defaultSearchData = {point: {}}
 
 export default function App(props) {
     const classes = useStyles();
     const [value, setValue] = React.useState("0");
     const [gettingNeighbours, setGettingNeighbours] = React.useState(false);
-    //const [neighbours, setNeighbours] = React.useState([]);
     const [searchData, setSearchData] = React.useState(null);
 
     const handleChange = (event, newValue) => {
@@ -95,23 +91,18 @@ export default function App(props) {
                         page: 0,
                         totalCount: r.length
                     }));
-            else resolve({data: [], page: 0, totalCount: 0})
+            else resolve({data: [], page: 0, totalCount: 0});
         }));
 
     function onGetNeighbours(x, y, radius) {
         if(!(checkFloatValidity(x) && checkFloatValidity(y) && checkFloatValidity(radius)))
-            alert('Incorrect coordinates');
+            alert('Введены некорректные данные!');
         else
-            // noinspection JSCheckFunctionSignatures
+        // noinspection JSCheckFunctionSignatures
         {
             setSearchData({point: {x, y}, radius});
             updateTable();
         }
-            /*getNeighbours({x, y}, radius)
-                .then(r => {
-                    //setNeighbours(r);
-                    updateTable();
-                });*/
     }
 
     function tableData(query) {
@@ -121,7 +112,7 @@ export default function App(props) {
 
     function sendNewPoint(x, y, description) {
         if(!(checkFloatValidity(x) && checkFloatValidity(y)))
-            alert('Incorrect coordinates');
+            alert('Введены некорректные координаты!');
         else
             savePoint({x, y, description})
                 .then(r => updateTable());
@@ -129,7 +120,7 @@ export default function App(props) {
 
     function editPoint(x, y, description, id) {
         if(!(checkFloatValidity(x) && checkFloatValidity(y)))
-            alert('Incorrect coordinates');
+            alert('Введены некорректные координаты!');
         else
             updatePoint({x, y, description, id})
                 .then(r => updateTable());
@@ -137,25 +128,28 @@ export default function App(props) {
 
     return (<TabContext value={value}>
         <AppBar className={classes.bar} position="static">
-            <h2 className={classes.h}>Neighbours test</h2>
+            <h2 className={classes.h}>Соседние точки</h2>
             <TabList
                 onChange={handleChange}
                 indicatorColor="secondary"
                 textColor="secondary"
                 variant="standard">
-                <Tab value="0" label="Add point" />
-                <Tab value="1" label="Get point's neighbours"/>
+                <Tab value="0" label="Добавление объекта" />
+                <Tab value="1" label="Получение соседей точки" />
             </TabList>
         </AppBar>
 
         <Container className={classes.root}>
-            <TabPanel style={{width: "100%"}} value="0"><PointForm onUpdate={updateTable}
-                                                                   onSave={sendNewPoint} /></TabPanel>
-            <TabPanel style={{width: "100%"}} value="1"><GetNeighboursForm onGetNeighbours={onGetNeighbours} /></TabPanel>
+            <TabPanel style={{width: "100%"}} value="0">
+                <PointForm onUpdate={updateTable} onSave={sendNewPoint} />
+            </TabPanel>
+            <TabPanel style={{width: "100%"}} value="1">
+                <GetNeighboursForm onGetNeighbours={onGetNeighbours} />
+            </TabPanel>
             <PointTable
                 onUpdate={updateTable}
                 updatePoint={editPoint}
-                tableRef={tableRef}
+                ref={tableRef}
                 data={tableData} />
         </Container>
 

@@ -50,10 +50,15 @@ const innerProps = {
     options: {
         pageSize: 8,
         pageSizeOptions: [8, 16, 25],
-        search: false,
         debounceInterval: 500,
         toolbarButtonAlignment: 'right',
         draggable: false,
+        search: false,
+        filtering: false,
+        actionsColumnIndex: -1,/*
+        pageSize: tableRef.current
+            ? tableRef.current.state.pageSize
+            : 8*/
     },
     icons: {
         FirstPage,
@@ -89,15 +94,16 @@ const tableColumns = [
     }
 ];
 
-
 const useStyles = makeStyles(theme =>
     createStyles({
         tableTitle: {}
     }));
 
 const defaultEditObject = {x: '', y: '', description: ''};
+//React.forwardRef((props, ref) => <PointTable {...props}/>;
 
-export default function PointTable(props) {
+export default function (props) {
+    //React.forwardRef((props, ref) => {
     const classes = useStyles();
     console.log(props);
     const [editObject, setEditObject] = React.useState(defaultEditObject);
@@ -138,15 +144,6 @@ export default function PointTable(props) {
             </Typography>}
             columns={tableColumns}
             actions={tableActions}
-            options={{
-                search: false,
-                filtering: false,
-                debounceInterval: 500,
-                actionsColumnIndex: -1,
-                pageSize: tableRef.current
-                    ? tableRef.current.state.pageSize
-                    : 8
-            }}
             style={{width: '100%', margin: 15}}/>
         <Dialog open={editObject !== defaultEditObject} onClose={e => setEditObject(defaultEditObject)}>
             <PointForm onClose={e => setEditObject(defaultEditObject)} initData={editObject} onSave={onSave}/>

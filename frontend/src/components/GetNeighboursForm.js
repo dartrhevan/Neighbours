@@ -31,13 +31,13 @@ export default function (props) {
     }
 
     return <Paper className={classes.form}>
-        <Typography>Get object's neighbours</Typography>
+        <Typography>Получение соседей точки</Typography>
         <TextField value={x} onChange={e => setX(e.target.value)} className={classes.input}
                    id="outlined-basic" label="X" variant="outlined"/>
         <TextField value={y} onChange={e => setY(e.target.value)} className={classes.input}
                    id="outlined-basic" label="Y" variant="outlined"/>
         <TextField value={radius} onChange={e => setRadius(e.target.value)} className={classes.input}
-                   id="outlined-basic" label="Radius" variant="outlined"/>
-        <Button variant='contained' color="primary" onClick={onList}>List</Button>
+                   id="outlined-basic" label="Радиус" variant="outlined"/>
+        <Button variant='contained' color="primary" onClick={onList}>Показать</Button>
     </Paper>;
 };
