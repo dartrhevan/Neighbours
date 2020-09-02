@@ -1,9 +1,8 @@
 import React from 'react'
-import MaterialTable, { Column } from 'material-table';
+import MaterialTable from 'material-table';
 import Typography from "@material-ui/core/Typography";
 import PointForm from "./PointForm";
 import {
-    Info,
     Edit,
     Delete,
     FirstPage,
@@ -15,7 +14,6 @@ import {
 import { createStyles, makeStyles } from "@material-ui/core/styles";
 import Dialog from "@material-ui/core/Dialog";
 import {deletePoint} from "../apiCalls";
-import Button from "@material-ui/core/Button";
 
 const innerProps = {
     localization: {
@@ -47,11 +45,7 @@ const innerProps = {
                 saveTooltip: 'Подтверждение',
             },
             deleteTooltip: 'Удалить запись',
-        },/*
-        toolbar: {
-            searchTooltip: 'Поиск',
-            searchPlaceholder: 'Поиск',
-        },*/
+        },
     },
     options: {
         pageSize: 8,
