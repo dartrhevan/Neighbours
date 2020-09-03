@@ -12,7 +12,7 @@ const pointScheme = new mongoose.Schema({
         },
         coordinates: {
             type: [Number],//[ longitude , latitude ]
-            required: true// -180 =< longitude <= 180 -90 =< latitude <= 90
+            required: true// -180 =< longitude(x) <= 180 -90 =< latitude(y) <= 90
         }
     }
 });

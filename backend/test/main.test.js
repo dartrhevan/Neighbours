@@ -39,6 +39,7 @@ describe("Tests", () => {
             .end(done);
     });
 
+
     it("Get neighbours tests", done => {
         request(app)
             .get(`/api/point/neighbours?m=30&x=51.741918&y=58.796505`)//Energetic's coordinates
@@ -105,6 +106,33 @@ describe("Tests", () => {
             //.expect('Content-Type', /json/)
             .expect(400)
             .expect({error: "Parameter y is missed"})
+            .end(done);
+    });
+
+    it("Incorrect request test 2", done => {
+        request(app)
+            .post('/api/point/')
+            .send({x: 30, y: -100, info: "t"})
+            .set('Accept', 'application/json')
+            //.expect('Content-Type', /json/)
+            .expect(400)
+            .expect({error: "Incorrect value of parameter y"})
+            .end(done);
+
+        request(app)
+            .post('/api/point/')
+            .send({x: 300, y: 0, info: "t"})
+            .set('Accept', 'application/json')
+            //.expect('Content-Type', /json/)
+            .expect(400)
+            .expect({error: "Incorrect value of parameter x"})
+            .end(done);
+
+        request(app)
+            .get("/api/point?count=2&page=-10")
+            //.expect('Content-Type', /json/)
+            .expect(400)
+            .expect({error: "Incorrect value of parameter page"})
             .end(done);
     });
 
