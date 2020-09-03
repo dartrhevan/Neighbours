@@ -15,7 +15,6 @@ before_install:
   - cp -r ./dist/* ../backend/public
   - popd
   - cd ./backend
-  - touch .env
 
 jobs:
   include:
