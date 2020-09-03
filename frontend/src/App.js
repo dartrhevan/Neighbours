@@ -39,18 +39,18 @@ const useStyles = makeStyles(theme =>
         }
     }),
 );
-//TODO: Adjust pagination
+
 const listData = (query = {page: 0, pageSize: 8}) =>
     new Promise((resolve => {
         listPoints(query.page, query.pageSize).then(r => resolve({
-            data: r.map(p => ({
+            data: r.data.map(p => ({
                 description: p.description,
                 x: p.location.coordinates[0],
                 y: p.location.coordinates[1],
                 id: p._id
             })),
             page: query.page,
-            totalCount: 45
+            totalCount: r.count
         }));
     }));
 

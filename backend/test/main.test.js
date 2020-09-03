@@ -113,7 +113,7 @@ describe("Tests", () => {
             .get("/api/point?page=0&count=100")
             .expect(200)
             .expect(response => {
-                const list = response.body;//JSON.parse(response.body);
+                const list = response.body;
                 console.log(list);
                 assert.ok(typeof list === typeof [], "Test");
 

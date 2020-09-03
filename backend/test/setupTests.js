@@ -1,7 +1,5 @@
-const mongoose = require('mongoose');
-const Point = require('../workers/Point');
 
-//mongoose.connect('mongodb://localhost:27017/example');
+const Point = require('../workers/Point');
 
 const RemovingPoint = new Point({description: "RemovingPoint", location: { coordinates: [10, 10] }});
 

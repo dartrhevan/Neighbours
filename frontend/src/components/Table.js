@@ -55,10 +55,7 @@ const innerProps = {
         draggable: false,
         search: false,
         filtering: false,
-        actionsColumnIndex: -1,/*
-        pageSize: tableRef.current
-            ? tableRef.current.state.pageSize
-            : 8*/
+        actionsColumnIndex: -1
     },
     icons: {
         FirstPage,
@@ -100,10 +97,8 @@ const useStyles = makeStyles(theme =>
     }));
 
 const defaultEditObject = {x: '', y: '', description: ''};
-//React.forwardRef((props, ref) => <PointTable {...props}/>;
 
 export default function (props) {
-    //React.forwardRef((props, ref) => {
     const classes = useStyles();
     console.log(props);
     const [editObject, setEditObject] = React.useState(defaultEditObject);
@@ -124,7 +119,7 @@ export default function (props) {
         },
     ];
 
-    const tableRef = props.tableRef;// React.createRef();
+    const tableRef = props.tableRef;
 
     const onSave = (x, y, d) => {
         setEditObject(defaultEditObject);

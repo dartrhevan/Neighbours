@@ -22,10 +22,12 @@ function savePoint(x, y, description) {//point = {x, y, info}
     return new Promise(((resolve, reject) => point.save(e => dbResultLessCallBack(e, resolve, reject))));
 }
 
-function getPoints(pageSize, page) {
-    return new Promise((resolve, reject) =>  Point.find({}, (e, r) => dbResultCallBack(e, r, resolve, reject))
-        .skip(pageSize * page)
-        .limit(pageSize));
+async function getPoints(pageSize, page) {
+    const count = await Point.countDocuments({});
+    return new Promise((resolve, reject) =>
+        Point.find({}, (e, data) => dbResultCallBack(e, {data, count}, resolve, reject))
+            .skip(pageSize * page)
+            .limit(pageSize));
 }
 
 function updatePoint(point) {
