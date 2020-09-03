@@ -9,38 +9,39 @@ const config = {
     devtool: 'source-map',
     resolve: {
         // support reading TypeScript and JavaScript files, 📖 -> https://github.com/TypeStrong/ts-loader
-        extensions: ['.ts', '.js']
+        extensions: [ '.ts', '.js' ]
     },
     stats: {
-        warningsFilter: [/critical dependency:/i],
+        warningsFilter: [ /critical dependency:/i ],
     },
-  module: {
-    rules: [
-        {
-            test: /\.m?js$/,
-            exclude: /(node_modules|bower_components)/,
-            use: {
-                loader: "babel-loader"
-            }
-        },
-        {
-            test: /\.css$/,
-            use: [
-                "style-loader",
-                {
-                    loader: "css-loader",
-                    options: {
-                        modules: true
-                    }
+    module: {
+        rules: [
+            {
+                test: /\.m?js$/,
+                exclude: /(node_modules|bower_components)/,
+                use: {
+                    loader: "babel-loader"
                 }
-            ]
-        },
-        {
-            test: /\.(png|svg|jpg|gif)$/,
-            use: ["file-loader"]
-        }
-  ]},
-    entry: "./src/index.js",
+            },
+            {
+                test: /\.css$/,
+                use: [
+                    "style-loader",
+                    {
+                        loader: "css-loader",
+                        options: {
+                            modules: true
+                        }
+                    }
+                ]
+            },
+            {
+                test: /\.(png|svg|jpg|gif)$/,
+                use: [ "file-loader" ]
+            }
+        ]
+    },
+    entry: [ '@babel/polyfill', './src/index.js' ], //"./src/index.js",
     mode: "development",
     output: {
         filename: "./index.js"

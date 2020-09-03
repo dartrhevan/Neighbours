@@ -18,7 +18,8 @@
     "react-dom": "^16.13.1",
     "react-scripts": "3.4.3",
     "webpack": "^4.42.0",
-    "webpack-filter-warnings-plugin": "latest"
+    "webpack-filter-warnings-plugin": "latest",
+    "@babel/polyfill":  "^7.11.5"
   },
   "scripts": {
     "start": "react-scripts start",

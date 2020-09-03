@@ -149,7 +149,7 @@ export default function App(props) {
             <PointTable
                 onUpdate={updateTable}
                 updatePoint={editPoint}
-                ref={tableRef}
+                tableRef={tableRef}
                 data={tableData} />
         </Container>
 
