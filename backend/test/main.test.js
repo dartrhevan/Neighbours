@@ -45,7 +45,7 @@ describe("Tests", () => {
             .get(`/api/point/neighbours?m=30&x=51.741918&y=58.796505`)//Energetic's coordinates
             .expect(200)
             .expect(response => {
-                const list = response.body.data;//JSON.parse(response.body);
+                const list = response.body;//JSON.parse(response.body);
                 console.log(list);
                 assert.notEqual(list.indexOf(Energetic), -1, "Contains Energetic");
                 assert.notEqual(list.indexOf(Irikla), -1, "Contains Irikla");
@@ -133,23 +133,6 @@ describe("Tests", () => {
             //.expect('Content-Type', /json/)
             .expect(400)
             .expect({error: "Incorrect value of parameter page"})
-            .end(done);
-    });
-
-    it("Neighbours test", async done => {
-        request(app)
-            .get("/api/point?page=0&count=100")
-            .expect(200)
-            .expect(response => {
-                const list = response.body.data;
-                console.log(list);
-                assert.ok(typeof list === typeof [], "Test");
-
-                assert.notEqual(list.indexOf(Energetic), -1, "Contains Energetic");
-                assert.notEqual(list.indexOf(Irikla), -1, "Contains Irikla");
-                assert.notEqual(list.indexOf(Gay), -1, "Contains Gay");
-                done();
-            })
             .end(done);
     });
 });
