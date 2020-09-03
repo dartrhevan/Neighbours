@@ -12,7 +12,7 @@ describe("Tests", () => {
             .get("/api/point?page=0&count=100")
             .expect(200)
             .expect(response => {
-                const list = response.body;//JSON.parse(response.body);
+                const list = response.body.data;//JSON.parse(response.body);
                 console.log(list);
                 assert.ok(typeof list === typeof [], "Response type is list");
 
@@ -29,7 +29,7 @@ describe("Tests", () => {
             .get("/api/point?count=2&page=0")
             .expect(200)
             .expect(response => {
-                const list = response.body;//JSON.parse(response.body);
+                const list = response.body.data;//JSON.parse(response.body);
                 console.log(list);
                 assert.ok(typeof list === typeof [], "Response type is list");
 
@@ -45,7 +45,7 @@ describe("Tests", () => {
             .get(`/api/point/neighbours?m=30&x=51.741918&y=58.796505`)//Energetic's coordinates
             .expect(200)
             .expect(response => {
-                const list = response.body;//JSON.parse(response.body);
+                const list = response.body.data;//JSON.parse(response.body);
                 console.log(list);
                 assert.notEqual(list.indexOf(Energetic), -1, "Contains Energetic");
                 assert.notEqual(list.indexOf(Irikla), -1, "Contains Irikla");
@@ -68,7 +68,7 @@ describe("Tests", () => {
                     .get("/api/point?page=0&count=100")
                     .expect(200)
                     .expect(response => {
-                        const list = response.body;
+                        const list = response.body.data;
                         console.log(list);
                         const index = list.indexOf(point);
                         assert.notEqual(index, -1, "Contains new point");
@@ -90,7 +90,7 @@ describe("Tests", () => {
             .get("/api/point?page=0&count=100")
             .expect(200)
             .expect(response => {
-                const list = response.body;
+                const list = response.body.data;
                 console.log(list);
                 assert.equal(list.find(el => el._id === id), undefined, "Point removed");
                 done();
@@ -141,7 +141,7 @@ describe("Tests", () => {
             .get("/api/point?page=0&count=100")
             .expect(200)
             .expect(response => {
-                const list = response.body;
+                const list = response.body.data;
                 console.log(list);
                 assert.ok(typeof list === typeof [], "Test");
 
