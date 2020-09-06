@@ -150,9 +150,9 @@ export default function App(props) {
             </TabPanel>
             <Paper style={{width: "calc(100% - 50px)", padding: 25}}>
                 <Typography>
-                    X -  Широта, нахоиться в отрезке от -90 до 90
+                    X - Широта, находиться в отрезке от -90 до 90
                     <br/>
-                    Y - Долгота, нахоиться в отрезке от -180 до 180
+                    Y - Долгота, находиться в отрезке от -180 до 180
                 </Typography>
             </Paper>
             <PointTable
