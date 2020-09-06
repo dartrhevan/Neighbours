@@ -12,6 +12,8 @@ import { listPoints, savePoint, updatePoint, getNeighbours } from "./apiCalls";
 import PointForm from "./components/PointForm";
 import { checkFloatValidity } from "./CheckFloatValidity";
 import GetNeighboursForm from "./components/GetNeighboursForm";
+import Typography from "@material-ui/core/Typography";
+import Paper from "@material-ui/core/Paper";
 
 const useStyles = makeStyles(theme =>
     createStyles({
@@ -27,7 +29,7 @@ const useStyles = makeStyles(theme =>
             flexDirection: "row"
         },
         h: {
-            padding: '10px 50px',
+            padding: 5,//'10px 50px',
             margin: 0
         },
         form: {
@@ -146,6 +148,13 @@ export default function App(props) {
             <TabPanel style={{width: "100%"}} value="1">
                 <GetNeighboursForm onGetNeighbours={onGetNeighbours} />
             </TabPanel>
+            <Paper style={{width: "calc(100% - 50px)", padding: 25}}>
+                <Typography>
+                    X -  Широта, нахоиться в отрезке от -90 до 90
+                    <br/>
+                    Y - Долгота, нахоиться в отрезке от -180 до 180
+                </Typography>
+            </Paper>
             <PointTable
                 onUpdate={updateTable}
                 updatePoint={editPoint}
