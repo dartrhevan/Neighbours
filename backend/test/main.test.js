@@ -24,6 +24,7 @@ describe("Tests", () => {
             .end(done);
     });
 
+
     it("Pagination tests", done => {
         request(app)
             .get("/api/point?count=2&page=0")

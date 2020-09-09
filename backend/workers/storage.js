@@ -45,13 +45,14 @@ function deletePoint(id) {
 function getNeighbours(m, n= 100, point) {
     console.log(point);
     return new Promise((resolve, reject) => Point.find({
-        location:
+        'location.coordinates':
             { $near :
-                    {
-                        $geometry: { type: "Point",  coordinates: [ point.x, point.y ] },
+                        //$geometry: { type: "Point",  coordinates: [ point.x, point.y ] },
                         //$minDistance: 1000,
-                        $maxDistance: m * 1000
-                    }
+                        //$maxDistance: m * 1000
+                        [ point.x, point.y ],
+                $maxDistance: m * 1000
+
             }
     }, (e, r) => dbResultCallBack(e, r, resolve, reject)).limit(n));
 }
