@@ -11,13 +11,15 @@ const isPositive = p => p >= 0;
 
 router.get('/neighbours', checkParameters('query', {
         ...coordinatesChecking,
-        m: isPositive
+        m: isPositive,
+        //n: isPositive
     }),
     basicHandler(req => {console.log('neighbours');
         const m = req.query.m;//m - radius in km
+        const n = req.query.n;//max neighbours count
         const x = req.query.x;
         const y = req.query.y;
-        return getNeighbours(m, {x, y});
+        return getNeighbours(m, n,{x, y});
     }));
 
 router.get('/', checkParameters('query', {
@@ -36,7 +38,6 @@ router.get('/', checkParameters('query', {
  * @param info - entity description
  */
 router.post('/', checkParameters('body', {
-        // -180 =< longitude(x) <= 180 -90 =< latitude(y) <= 90
         ...coordinatesChecking,
         description: null,
     }),
@@ -56,9 +57,6 @@ router.post('/', checkParameters('body', {
  * @param info - entity description
  */
 router.put('/', checkParameters('body', {
-        // -180 =< longitude(x) <= 180 -90 =< latitude(y) <= 90
-        /*x: x => x >= -180 && x <= 180,
-        y: y => y >= -90 && y <= 90,*/
         ...coordinatesChecking,
         description: null,
         id: null
