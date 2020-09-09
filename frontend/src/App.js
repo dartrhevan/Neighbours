@@ -82,7 +82,7 @@ export default function App(props) {
     const listNeighbours = query =>
         new Promise((resolve => {
             if (searchData)
-                getNeighbours(searchData.point, searchData.radius)
+                getNeighbours(searchData.point, searchData.radius, searchData.count)
                     .then(r => resolve({
                         data: r.map(p => ({
                             description: p.description,
@@ -96,13 +96,13 @@ export default function App(props) {
             else resolve({data: [], page: 0, totalCount: 0});
         }));
 
-    function onGetNeighbours(x, y, radius) {
+    function onGetNeighbours(x, y, radius, count) {
         if(!(checkFloatValidity(x) && checkFloatValidity(y) && checkFloatValidity(radius)))
             alert('Введены некорректные данные!');
         else
         // noinspection JSCheckFunctionSignatures
         {
-            setSearchData({point: {x, y}, radius});
+            setSearchData({point: {x, y}, radius, count});
             updateTable();
         }
     }

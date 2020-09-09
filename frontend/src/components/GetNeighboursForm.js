@@ -25,9 +25,10 @@ export default function (props) {
     const [x, setX] = React.useState('');
     const [y, setY] = React.useState('');
     const [radius, setRadius] = React.useState('');
+    const [count, setCount] = React.useState('');
 
     function onList(event) {
-        props.onGetNeighbours(x, y, radius);
+        props.onGetNeighbours(x, y, radius, count);
     }
 
     return <Paper className={classes.form}>
@@ -38,6 +39,8 @@ export default function (props) {
                    id="outlined-basic" label="Y" variant="outlined"/>
         <TextField value={radius} onChange={e => setRadius(e.target.value)} className={classes.input}
                    id="outlined-basic" label="Радиус" variant="outlined"/>
+        <TextField value={count} onChange={e => setCount(e.target.value)} className={classes.input}
+                   id="outlined-basic" label="Количество" variant="outlined"/>
         <Button variant='contained' color="primary" onClick={onList}>Показать</Button>
     </Paper>;
 };

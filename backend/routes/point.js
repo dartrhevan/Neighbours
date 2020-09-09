@@ -12,11 +12,11 @@ const isPositive = p => p >= 0;
 router.get('/neighbours', checkParameters('query', {
         ...coordinatesChecking,
         m: isPositive,
-        //n: isPositive
+        n: isPositive
     }),
     basicHandler(req => {console.log('neighbours');
         const m = req.query.m;//m - radius in km
-        const n = req.query.n;//max neighbours count
+        const n = Number.parseInt(req.query.n);//max neighbours count
         const x = req.query.x;
         const y = req.query.y;
         return getNeighbours(m, n,{x, y});

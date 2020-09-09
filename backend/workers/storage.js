@@ -42,7 +42,7 @@ function deletePoint(id) {
         Point.findByIdAndRemove(id, e => dbResultLessCallBack(e, resolve, reject)));
 }
 
-function getNeighbours(m, n= 100, point) {
+function getNeighbours(m, n, point) {
     console.log(point);
     return new Promise((resolve, reject) => Point.find({
         'location.coordinates':
