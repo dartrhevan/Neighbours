@@ -87,11 +87,12 @@ const defaultParamCheckFunc = v => true;
 
 function checkParameters(parameterPlace, params) {
     return (req, res, next) => {
+        console.log(req.body)
         for (let param of Object.keys(params)) {
             const paramValue = req[parameterPlace][param];
             let paramCheckFunc = params[param];
             if(!paramCheckFunc) paramCheckFunc = defaultParamCheckFunc;
-            if (!paramValue) {
+            if (paramValue === undefined || paramValue === null) {
                 res.statusCode = 400;
                 res.send({error: `Parameter ${param} is missed`});
                 return;
