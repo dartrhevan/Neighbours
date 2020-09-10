@@ -43,7 +43,7 @@ describe("Tests", () => {
 
     it("Get neighbours tests", done => {
         request(app)
-            .get(`/api/point/neighbours?m=30&x=51.741918&y=58.796505n=100`)//Energetic's coordinates
+            .get(`/api/point/neighbours?m=30&x=51.741918&y=58.796505&n=100`)//Energetic's coordinates
             .expect(200)
             .expect(response => {
                 const list = response.body;//JSON.parse(response.body);
