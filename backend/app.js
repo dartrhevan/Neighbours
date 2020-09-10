@@ -1,5 +1,9 @@
 if(!process.env.DEPLOYMENT)
     require('dotenv').config();
+
+if(process.env.FILL_DB) {
+    require('./workers/fillDB')
+}
 const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');

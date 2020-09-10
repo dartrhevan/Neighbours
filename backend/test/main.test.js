@@ -62,7 +62,6 @@ describe("Tests", () => {
             .post('/api/point/')
             .send({x: 30, y: 30, info: "Yakub"})
             .set('Accept', 'application/json')
-            //.expect('Content-Type', /json/)
             .expect(200)
             .end((err, res) =>
                 request(app)
